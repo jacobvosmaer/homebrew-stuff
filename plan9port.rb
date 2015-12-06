@@ -14,6 +14,8 @@ class Plan9port < Formula
 
   depends_on :x11 => :optional
 
+  patch :DATA
+
   def install
     ENV["PLAN9_TARGET"] = libexec
 
@@ -23,8 +25,6 @@ class Plan9port < Formula
         f.puts "FONTSRV=fontsrv"
       end
     end
-
-    patch :DATA
 
     system "./INSTALL"
 
