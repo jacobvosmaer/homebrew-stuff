@@ -74,3 +74,16 @@ index 3607ab4..d63b728 100644
                         if(m & NSAlternateKeyMask)
                                 in.kbuttons |= 2;
                         if(m & NSCommandKeyMask)
+diff --git a/src/cmd/devdraw/cocoa-screen.m b/src/cmd/devdraw/cocoa-screen.m
+index 3607ab4..d63b728 100644
+--- a/src/cmd/devdraw/cocoa-screen.m
++++ b/src/cmd/devdraw/cocoa-screen.m
+@@ -895,6 +895,8 @@ getkeyboard(NSEvent *e)
+ 	case NSFlagsChanged:
+ 		if(in.mbuttons || in.kbuttons){
+ 			in.kbuttons = 0;
++			if(m & NSControlKeyMask)
++				in.kbuttons |= 1;
+ 			if(m & NSAlternateKeyMask)
+ 				in.kbuttons |= 2;
+ 			if(m & NSCommandKeyMask)
