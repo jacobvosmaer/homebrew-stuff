@@ -61,18 +61,16 @@ end
 
 __END__
 Patch from http://www.mostlymaths.net/2013/04/just-as-mario-using-plan9-plumber.html
-diff -r 1bd8b25173d5 src/cmd/devdraw/cocoa-screen.m
---- a/src/cmd/devdraw/cocoa-screen.m Tue Mar 19 14:36:50 2013 -0400
-+++ b/src/cmd/devdraw/cocoa-screen.m Sat Apr 06 20:02:44 2013 +0200
-@@ -847,7 +847,9 @@
-  case NSFlagsChanged:
-   if(in.mbuttons || in.kbuttons){
-    in.kbuttons = 0;
--   if(m & NSAlternateKeyMask)
-+   if(m & NSControlKeyMask)
-+    in.kbuttons |= 1;
-+                        if(m & NSAlternateKeyMask)
-     in.kbuttons |= 2;
-    if(m & NSCommandKeyMask)
-     in.kbuttons |= 4;
-
+diff --git a/src/cmd/devdraw/cocoa-screen.m b/src/cmd/devdraw/cocoa-screen.m
+index 3607ab4..d63b728 100644
+--- a/src/cmd/devdraw/cocoa-screen.m
++++ b/src/cmd/devdraw/cocoa-screen.m
+@@ -895,6 +895,8 @@ getkeyboard(NSEvent *e)
+        case NSFlagsChanged:
+                if(in.mbuttons || in.kbuttons){
+                        in.kbuttons = 0;
++                       if(m & NSControlKeyMask)
++                               in.kbuttons |= 1;
+                        if(m & NSAlternateKeyMask)
+                                in.kbuttons |= 2;
+                        if(m & NSCommandKeyMask)
