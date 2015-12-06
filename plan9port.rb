@@ -61,6 +61,8 @@ end
 
 __END__
 Patch from http://www.mostlymaths.net/2013/04/just-as-mario-using-plan9-plumber.html
+'now you can press Ctrl while having Alt pressed to send a "button 1" chord'
+
 diff --git a/src/cmd/devdraw/cocoa-screen.m b/src/cmd/devdraw/cocoa-screen.m
 index 3607ab4..d63b728 100644
 --- a/src/cmd/devdraw/cocoa-screen.m
