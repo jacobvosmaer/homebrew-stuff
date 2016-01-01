@@ -26,6 +26,7 @@ class Plan9port < Formula
       end
     end
 
+    # Build factotum (keychain), mailfs and upas (mail)
     IO.popen(%w(ed src/cmd/mkfile), 'w') do |ed|
       ed.puts '/^BUGGERED=/'
       ed.puts 's/|factotum|/|/'
@@ -35,6 +36,7 @@ class Plan9port < Formula
       ed.puts 'wq'
     end
 
+    # Build upas/nfs (mail)
     IO.popen(%w(ed src/cmd/upas/mkfile), 'w') do |ed|
       ed.puts '/^PROGS=/'
       ed.puts 's/$/ nfs/'
@@ -42,12 +44,16 @@ class Plan9port < Formula
       ed.puts 'wq'
     end
 
+    # Because /usr/local is on a case-insensitve filesystem,
+    # acme/Mail will get overwritten by the plan9 'mail' wrapper
+    # script. Rename acme/Mail to acme/Amail.
     IO.popen(%w(ed src/cmd/acme/mail/mkfile), 'w') do |ed|
       ed.puts '/^TARG=/'
       ed.puts 's/Mail/Amail/'
       ed.puts 'p'
       ed.puts 'wq'
     end
+
     system "./INSTALL"
 
     libexec.install Dir["*"]
