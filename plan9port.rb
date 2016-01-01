@@ -26,6 +26,28 @@ class Plan9port < Formula
       end
     end
 
+    IO.popen(%w(ed src/cmd/mkfile), 'w') do |ed|
+      ed.puts '/^BUGGERED=/'
+      ed.puts 's/|factotum|/|/'
+      ed.puts 's/|mailfs|/|/'
+      ed.puts 's/|upas|/|/'
+      ed.puts 'p'
+      ed.puts 'wq'
+    end
+
+    IO.popen(%w(ed src/cmd/upas/mkfile), 'w') do |ed|
+      ed.puts '/^PROGS=/'
+      ed.puts 's/$/ nfs/'
+      ed.puts 'p'
+      ed.puts 'wq'
+    end
+
+    IO.popen(%w(ed src/cmd/acme/mail/mkfile), 'w') do |ed|
+      ed.puts '/^TARG=/'
+      ed.puts 's/Mail/Amail/'
+      ed.puts 'p'
+      ed.puts 'wq'
+    end
     system "./INSTALL"
 
     libexec.install Dir["*"]
