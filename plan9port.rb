@@ -104,3 +104,19 @@ index 3607ab4..d63b728 100644
  			if(m & NSAlternateKeyMask)
  				in.kbuttons |= 2;
  			if(m & NSCommandKeyMask)
+
+diff a/src/cmd/upas/ned/nedmail.c b/src/cmd/upas/ned/nedmail.c
+--- a/ned/nedmail.c
++++ b/ned/nedmail.c
+@@ -2549,9 +2549,8 @@ rooted(String *s)
+ {
+ 	static char buf[256];
+ 
+-	if(strcmp(root, ".") != 0)
+-		return s;
+-	snprint(buf, sizeof(buf), "/mail/fs/%s/%s", mbname, s_to_c(s));
++	// Edit by Jacob. Not 100% sure what I am doing here but it seems to work
++	snprint(buf, sizeof(buf), "Mail/%s", s_to_c(s));
+ 	s_free(s);
+ 	return s_copy(buf);
+ }
