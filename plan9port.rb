@@ -104,9 +104,10 @@ index 3607ab4..d63b728 100644
  			if(m & NSAlternateKeyMask)
  				in.kbuttons |= 2;
  			if(m & NSCommandKeyMask)
+
 diff a/src/cmd/upas/ned/nedmail.c b/src/cmd/upas/ned/nedmail.c
---- a/ned/nedmail.c
-+++ b/ned/nedmail.c
+--- a/src/cmd/upas/ned/nedmail.c
++++ b/src/cmd/upas/ned/nedmail.c
 @@ -2549,9 +2549,8 @@ rooted(String *s)
  {
  	static char buf[256];
