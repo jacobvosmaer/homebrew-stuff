@@ -26,34 +26,6 @@ class Plan9port < Formula
       end
     end
 
-    # Build factotum (keychain), mailfs and upas (mail)
-    IO.popen(%w(ed src/cmd/mkfile), 'w') do |ed|
-      ed.puts '/^BUGGERED=/'
-      ed.puts 's/|factotum|/|/'
-      ed.puts 's/|mailfs|/|/'
-      ed.puts 's/|upas|/|/'
-      ed.puts 'p'
-      ed.puts 'wq'
-    end
-
-    # Build upas/nfs (mail)
-    IO.popen(%w(ed src/cmd/upas/mkfile), 'w') do |ed|
-      ed.puts '/^PROGS=/'
-      ed.puts 's/$/ nfs/'
-      ed.puts 'p'
-      ed.puts 'wq'
-    end
-
-    # Because /usr/local is on a case-insensitve filesystem,
-    # acme/Mail will get overwritten by the plan9 'mail' wrapper
-    # script. Rename acme/Mail to acme/Amail.
-    IO.popen(%w(ed src/cmd/acme/mail/mkfile), 'w') do |ed|
-      ed.puts '/^TARG=/'
-      ed.puts 's/Mail/Amail/'
-      ed.puts 'p'
-      ed.puts 'wq'
-    end
-
     system "./INSTALL"
 
     libexec.install Dir["*"]
@@ -88,6 +60,7 @@ class Plan9port < Formula
 end
 
 __END__
+
 Patch from http://www.mostlymaths.net/2013/04/just-as-mario-using-plan9-plumber.html
 'now you can press Ctrl while having Alt pressed to send a "button 1" chord'
 
@@ -105,6 +78,10 @@ index 3607ab4..d63b728 100644
  				in.kbuttons |= 2;
  			if(m & NSCommandKeyMask)
 
+Nedmail has trouble sending email because it builds invalid paths to
+individual mail messages when quoting etc. Might be because we are
+using nfs instead of 'original' upas/fs. This patch seems to fix it.
+
 diff a/src/cmd/upas/ned/nedmail.c b/src/cmd/upas/ned/nedmail.c
 --- a/src/cmd/upas/ned/nedmail.c
 +++ b/src/cmd/upas/ned/nedmail.c
@@ -120,3 +97,51 @@ diff a/src/cmd/upas/ned/nedmail.c b/src/cmd/upas/ned/nedmail.c
  	s_free(s);
  	return s_copy(buf);
  }
+
+Because /usr/local is on a case-insensitve filesystem, acme/Mail will
+get overwritten by the plan9 'mail' wrapper script. Rename acme/Mail
+to acme/Amail.
+
+diff --git a/src/cmd/acme/mail/mkfile b/src/cmd/acme/mail/mkfile
+index d95e1b2..1c7ebf3 100644
+--- a/src/cmd/acme/mail/mkfile
++++ b/src/cmd/acme/mail/mkfile
+@@ -1,6 +1,6 @@
+ <$PLAN9/src/mkhdr
+ 
+-TARG=Mail
++TARG=Amail
+ OFILES=\
+ 		html.$O\
+ 		mail.$O\
+
+Build programs required for mail: factotum (credential keychain),
+mailfs, upas (mail tools), nfs (the 'new' upas/fs implementation of
+plan9port).
+
+diff --git a/src/cmd/mkfile b/src/cmd/mkfile
+index d256303..53489ce 100644
+--- a/src/cmd/mkfile
++++ b/src/cmd/mkfile
+@@ -4,7 +4,7 @@ TARG=`ls *.[cy] *.lx | egrep -v "\.tab\.c$|^x\." | sed 's/\.[cy]//; s/\.lx//'`
+ 
+ <$PLAN9/src/mkmany
+ 
+-BUGGERED='CVS|faces|factotum|fontsrv|lp|ip|mailfs|upas|vncv|mnihongo|mpm|index|u9fs|secstore|smugfs|snarfer'
++BUGGERED='CVS|faces|fontsrv|lp|ip|vncv|mnihongo|mpm|index|u9fs|secstore|smugfs|snarfer'
+ DIRS=lex `ls -l |sed -n 's/^d.* //p' |egrep -v "^($BUGGERED)$"|egrep -v '^lex$'` $FONTSRV
+ 
+ <$PLAN9/src/mkdirs
+diff --git a/src/cmd/upas/mkfile b/src/cmd/upas/mkfile
+index 4a33e9f..5335f5e 100644
+--- a/src/cmd/upas/mkfile
++++ b/src/cmd/upas/mkfile
+@@ -2,7 +2,7 @@
+ 
+ LIBS=common
+ #PROGS=smtp alias fs ned misc q send scanmail pop3 ml marshal vf filterkit unesc
+-PROGS=smtp alias fs ned q send marshal vf misc
++PROGS=smtp alias fs ned q send marshal vf misc nfs
+ #libs must be made first
+ DIRS=$LIBS $PROGS
+ 
