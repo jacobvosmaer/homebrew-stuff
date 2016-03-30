@@ -60,24 +60,6 @@ class Plan9port < Formula
 end
 
 __END__
-
-Patch from http://www.mostlymaths.net/2013/04/just-as-mario-using-plan9-plumber.html
-'now you can press Ctrl while having Alt pressed to send a "button 1" chord'
-
-diff --git a/src/cmd/devdraw/cocoa-screen.m b/src/cmd/devdraw/cocoa-screen.m
-index 3607ab4..d63b728 100644
---- a/src/cmd/devdraw/cocoa-screen.m
-+++ b/src/cmd/devdraw/cocoa-screen.m
-@@ -895,6 +895,8 @@ getkeyboard(NSEvent *e)
- 	case NSFlagsChanged:
- 		if(in.mbuttons || in.kbuttons){
- 			in.kbuttons = 0;
-+			if(m & NSControlKeyMask)
-+				in.kbuttons |= 1;
- 			if(m & NSAlternateKeyMask)
- 				in.kbuttons |= 2;
- 			if(m & NSCommandKeyMask)
-
 Nedmail has trouble sending email because it builds invalid paths to
 individual mail messages when quoting etc. Might be because we are
 using nfs instead of 'original' upas/fs. This patch seems to fix it.
@@ -108,7 +90,7 @@ index d95e1b2..1c7ebf3 100644
 +++ b/src/cmd/acme/mail/mkfile
 @@ -1,6 +1,6 @@
  <$PLAN9/src/mkhdr
- 
+
 -TARG=Mail
 +TARG=Amail
  OFILES=\
@@ -124,24 +106,24 @@ index d256303..53489ce 100644
 --- a/src/cmd/mkfile
 +++ b/src/cmd/mkfile
 @@ -4,7 +4,7 @@ TARG=`ls *.[cy] *.lx | egrep -v "\.tab\.c$|^x\." | sed 's/\.[cy]//; s/\.lx//'`
- 
+
  <$PLAN9/src/mkmany
- 
+
 -BUGGERED='CVS|faces|factotum|fontsrv|lp|ip|mailfs|upas|vncv|mnihongo|mpm|index|u9fs|secstore|smugfs|snarfer'
 +BUGGERED='CVS|faces|fontsrv|lp|ip|vncv|mnihongo|mpm|index|u9fs|secstore|smugfs|snarfer'
  DIRS=lex `ls -l |sed -n 's/^d.* //p' |egrep -v "^($BUGGERED)$"|egrep -v '^lex$'` $FONTSRV
- 
+
  <$PLAN9/src/mkdirs
 diff --git a/src/cmd/upas/mkfile b/src/cmd/upas/mkfile
 index 4a33e9f..5335f5e 100644
 --- a/src/cmd/upas/mkfile
 +++ b/src/cmd/upas/mkfile
 @@ -2,7 +2,7 @@
- 
+
  LIBS=common
  #PROGS=smtp alias fs ned misc q send scanmail pop3 ml marshal vf filterkit unesc
 -PROGS=smtp alias fs ned q send marshal vf misc
 +PROGS=smtp alias fs ned q send marshal vf misc nfs
  #libs must be made first
  DIRS=$LIBS $PROGS
- 
+
