@@ -127,6 +127,10 @@ index 4a33e9f..5335f5e 100644
  #libs must be made first
  DIRS=$LIBS $PROGS
 
+Another nedmail patch: when forwarding, nedmail leaves the subject
+line of the outgoing mail blank. This patch lifts the code that sets
+the subject line when replying and applies it to forwarding as well.
+
 --- a/src/cmd/upas/ned/nedmail.c	2016-04-22 21:21:31.000000000 +0200
 +++ b/src/cmd/upas/ned/nedmail.c	2016-04-22 21:27:41.000000000 +0200
 @@ -181,6 +181,7 @@
