@@ -127,3 +127,58 @@ index 4a33e9f..5335f5e 100644
  #libs must be made first
  DIRS=$LIBS $PROGS
 
+--- a/src/cmd/upas/ned/nedmail.c	2016-04-22 21:21:31.000000000 +0200
++++ b/src/cmd/upas/ned/nedmail.c	2016-04-22 21:27:41.000000000 +0200
+@@ -181,6 +181,7 @@
+ String*		rooted(String*);
+ int		plumb(Message*, Ctype*);
+ String*		addrecolon(char*);
++String*		addfwdcolon(char*);
+ void		exitfs(char*);
+ Message*	flushdeleted(Message*);
+ 
+@@ -1949,6 +1950,8 @@
+ {
+ 	char **av;
+ 	int i, ai;
++	Message *nm;
++	String *subject = nil;
+ 	String *path;
+ 
+ 	if(m == &top){
+@@ -1970,6 +1973,15 @@
+ 	else
+ 		av[ai++] = "mime";
+ 
++	for(nm = m; nm != &top; nm = nm->parent){
++		if(*nm->subject){
++			av[ai++] = "-s";
++			subject = addfwdcolon(nm->subject);
++			av[ai++] = s_to_c(subject);;
++			break;
++		}
++	}
++
+ 	av[ai++] = "-A";
+ 	path = rooted(extendpath(m->path, "raw"));
+ 	av[ai++] = s_to_c(path);
+@@ -2608,6 +2620,19 @@
+ 	return str;
+ }
+ 
++String*
++addfwdcolon(char *s)
++{
++	String *str;
++
++	if(cistrncmp(s, "fwd:", 4) != 0){
++		str = s_copy("Fwd: ");
++		s_append(str, s);
++	} else
++		str = s_copy(s);
++	return str;
++}
++
+ void
+ exitfs(char *rv)
+ {
