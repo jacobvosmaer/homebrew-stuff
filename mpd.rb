@@ -12,7 +12,7 @@ class Mpd < Formula
   end
 
   head do
-    url "git://git.musicpd.org/master/mpd.git"
+    url "git://github.com/jacobvosmaer/MPD.git"
     depends_on "autoconf" => :build
     depends_on "automake" => :build
   end
