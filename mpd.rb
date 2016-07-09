@@ -12,8 +12,7 @@ class Mpd < Formula
   end
 
   head do
-    url "git://github.com/jacobvosmaer/MPD.git"
-    branch "osx-multichannel"
+    url "git://github.com/jacobvosmaer/MPD.git", branch: "osx-channelmap"
     depends_on "autoconf" => :build
     depends_on "automake" => :build
   end
