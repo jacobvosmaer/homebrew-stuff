@@ -7,10 +7,10 @@ class Opensmtpd < Formula
   head "https://github.com/OpenSMTPD/OpenSMTPD.git", :branch => "portable"
 
   # thank you https://gist.github.com/mistydemeo/5519261
-  depends_on "automake => :build
+  depends_on "automake" => :build
   depends_on "autoconf" => :build
   depends_on "libtool" => :build
-  depends_on "bison"" => :build
+  depends_on "bison" => :build
   depends_on "pkg-config" => :build
   depends_on "libressl"
   depends_on "libasr"
