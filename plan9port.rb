@@ -102,17 +102,17 @@ mailfs, upas (mail tools), nfs (the 'new' upas/fs implementation of
 plan9port).
 
 diff --git a/src/cmd/mkfile b/src/cmd/mkfile
-index d256303..53489ce 100644
+index bc8b5a0d..7532de5b 100644
 --- a/src/cmd/mkfile
 +++ b/src/cmd/mkfile
 @@ -4,7 +4,7 @@ TARG=`ls *.[cy] *.lx | egrep -v "\.tab\.c$|^x\." | sed 's/\.[cy]//; s/\.lx//'`
-
+ 
  <$PLAN9/src/mkmany
-
--BUGGERED='CVS|faces|factotum|fontsrv|lp|ip|mailfs|upas|vncv|mnihongo|mpm|index|u9fs|secstore|smugfs|snarfer'
-+BUGGERED='CVS|faces|fontsrv|lp|ip|vncv|mnihongo|mpm|index|u9fs|secstore|smugfs|snarfer'
+ 
+-BUGGERED='CVS|faces|factotum|lp|ip|mailfs|upas|vncv|mnihongo|mpm|index|u9fs|secstore|smugfs|snarfer'
++BUGGERED='CVS|faces|lp|ip|vncv|mnihongo|mpm|index|u9fs|secstore|smugfs|snarfer'
  DIRS=lex `ls -l |sed -n 's/^d.* //p' |egrep -v "^($BUGGERED)$"|egrep -v '^lex$'` $FONTSRV
-
+ 
  <$PLAN9/src/mkdirs
 diff --git a/src/cmd/upas/mkfile b/src/cmd/upas/mkfile
 index 4a33e9f..5335f5e 100644
